@@ -27,6 +27,7 @@ public class Document{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
+    @JsonIgnore
     private Long id;
     private String originalName;
     @JsonIgnore
@@ -40,4 +41,5 @@ public class Document{
     private LocalDateTime deleted;
     @JsonIgnore
     private String ownerIp;
+    private String hashId;
 }

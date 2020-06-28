@@ -9,10 +9,10 @@ import pl.jacob_the_liar.module.web_files.model.Document;
  * @author: Jakub O.  [https://github.com/JacobTheLiar]
  * @date : 2020-06-28 18:19
  * *
- * @className: FileRepository
+ * @className: DocumentRepository
  * *
  * *
  ******************************************************/
-public interface DocumentRepository extends JpaRepository<Long, Document>{
-    
+public interface DocumentRepository extends JpaRepository<Document, Long>{
+
 }
