@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "file", schema = "public")
 @Data
 @NoArgsConstructor
-public class Store{
+public class Document{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
