@@ -1,4 +1,4 @@
-package pl.jacob_the_liar.module.web_files;
+package pl.jacob_the_liar.module.web_files.controller;
 
 
 import lombok.RequiredArgsConstructor;
