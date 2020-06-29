@@ -2,10 +2,12 @@ package pl.jacob_the_liar.module.web_files.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.jacob_the_liar.module.web_files.model.Document;
+import pl.jacob_the_liar.module.web_files.model.DocumentDownload;
 import pl.jacob_the_liar.module.web_files.model.DocumentInfo;
 import pl.jacob_the_liar.module.web_files.repository.DocumentRepository;
 import pl.jacob_the_liar.module.web_files.utils.DocumentChecksum;
@@ -15,6 +17,7 @@ import pl.jacob_the_liar.module.web_files.utils.StoreDocument;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 /**
@@ -53,14 +56,30 @@ public class DocumentService{
         
         StoreDocument storeDocument = new StoreDocument(document, new MultipartFileBytes(file));
         storeDocument.proceed();
-        
+    
         DocumentChecksum checksum = new DocumentChecksum(document);
         checksum.proceedChecksum();
-        
+    
         documentRepository.save(document);
-        
+    
         DocumentInfo info = new DocumentInfo(document, hashidsSalt, request.getRequestURL().toString());
-        
+    
         return info;
+    }
+    
+    
+    public DocumentDownload getDocument(String fileId){
+        
+        Hashids hashids = new Hashids(hashidsSalt);
+        
+        long[] docId = hashids.decode(fileId);
+        
+        Optional<Document> doc = documentRepository.findById(docId[0]);
+        if (doc.isPresent()) {
+            doc.get().setLastUse(LocalDateTime.now());
+            documentRepository.save(doc.get());
+            return new DocumentDownload(doc.get());
+        }
+        return null;
     }
 }

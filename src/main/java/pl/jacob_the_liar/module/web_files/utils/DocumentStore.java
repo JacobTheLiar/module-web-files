@@ -14,4 +14,6 @@ public interface DocumentStore{
     String getLocalPath();
     
     String getLocalName();
+    
+    String getContentType();
 }
