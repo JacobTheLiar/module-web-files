@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import pl.jacob_the_liar.module.web_files.model.Document;
+import pl.jacob_the_liar.module.web_files.model.DocumentInfo;
 import pl.jacob_the_liar.module.web_files.service.DocumentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +31,8 @@ public class InsertDocumentController{
     
     
     @PostMapping
-    public Document insertDocument(@RequestParam("file") MultipartFile file, HttpServletRequest request){
-        String remoteAddress = request.getRemoteAddr();
-        return documentService.storeDocument(file, remoteAddress);
+    public DocumentInfo insertDocument(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        DocumentInfo document = documentService.storeDocument(file, request);
+        return document;
     }
 }

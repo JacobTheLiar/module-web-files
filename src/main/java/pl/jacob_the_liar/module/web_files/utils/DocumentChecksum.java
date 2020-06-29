@@ -14,14 +14,14 @@ import java.security.NoSuchAlgorithmException;
  * @author: Jakub O.  [https://github.com/JacobTheLiar]
  * @date : 2020-06-28 20:51
  * *
- * @className: FileCheckSum
+ * @className: DocumentChecksum
  * *
  * *
  ******************************************************/
 @RequiredArgsConstructor
-public class FileChecksum{
+public class DocumentChecksum{
     
-    private final String fileName;
+    private final ChecksumInfo document;
     
     
     private static String getFileChecksum(MessageDigest digest, File file) throws IOException{
@@ -56,9 +56,16 @@ public class FileChecksum{
     }
     
     
-    public String getChecksum() throws IOException, NoSuchAlgorithmException{
-        File file = new File(fileName);
-        MessageDigest md5Digest = MessageDigest.getInstance("MD5");
-        return getFileChecksum(md5Digest, file);
+    public boolean proceedChecksum(){
+        
+        File file = new File(document.getLocalPath() + document.getLocalName());
+        MessageDigest md5Digest = null;
+        try {
+            md5Digest = MessageDigest.getInstance("MD5");
+            document.setHash(getFileChecksum(md5Digest, file));
+        } catch (NoSuchAlgorithmException | IOException e) {
+            return false;
+        }
+        return true;
     }
 }

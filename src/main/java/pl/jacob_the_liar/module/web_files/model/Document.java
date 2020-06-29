@@ -4,6 +4,8 @@ package pl.jacob_the_liar.module.web_files.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.jacob_the_liar.module.web_files.utils.ChecksumInfo;
+import pl.jacob_the_liar.module.web_files.utils.DocumentStore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +24,7 @@ import java.time.LocalDateTime;
 @Table(name = "file", schema = "public")
 @Data
 @NoArgsConstructor
-public class Document{
+public class Document implements DocumentStore, ChecksumInfo{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +43,4 @@ public class Document{
     private LocalDateTime deleted;
     @JsonIgnore
     private String ownerIp;
-    private String hashId;
 }
