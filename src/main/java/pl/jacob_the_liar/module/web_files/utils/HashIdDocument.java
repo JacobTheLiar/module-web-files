@@ -12,12 +12,12 @@ import org.hashids.Hashids;
  * *
  * *
  ******************************************************/
-public class DocumentHashId implements DocumentId{
+public class HashIdDocument implements DocumentId{
     
     private final Hashids hashids;
     
     
-    public DocumentHashId(String salt){
+    public HashIdDocument(String salt){
         this.hashids = new Hashids(salt);
     }
     

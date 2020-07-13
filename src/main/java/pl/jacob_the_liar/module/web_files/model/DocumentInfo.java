@@ -3,8 +3,8 @@ package pl.jacob_the_liar.module.web_files.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import pl.jacob_the_liar.module.web_files.utils.DocumentHashId;
 import pl.jacob_the_liar.module.web_files.utils.DocumentId;
+import pl.jacob_the_liar.module.web_files.utils.HashIdDocument;
 
 
 /**
@@ -35,8 +35,8 @@ public class DocumentInfo extends Document{
         super.setLastUse(document.getLastUse());
         super.setDeleted(document.getDeleted());
         super.setOwnerIp(document.getOwnerIp());
-        
-        DocumentId documentId = new DocumentHashId(salt);
+    
+        DocumentId documentId = new HashIdDocument(salt);
         this.hashids = documentId.encode(document.getId());
         this.directLink = uri + hashids;
     }

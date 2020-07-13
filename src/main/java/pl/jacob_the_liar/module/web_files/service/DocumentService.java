@@ -66,8 +66,8 @@ public class DocumentService{
     
     public DocumentDownload getDocument(String fileId){
     
-        DocumentHashId hashid = new DocumentHashId(salt);
-        long documentId = hashid.decode(fileId);
+        HashIdDocument hashId = new HashIdDocument(salt);
+        long documentId = hashId.decode(fileId);
     
         Optional<Document> documentOpt = documentRepository.findById(documentId);
         if (documentOpt.isPresent()) {
@@ -75,18 +75,18 @@ public class DocumentService{
             documentRepository.save(documentOpt.get());
             return new DocumentDownload(documentOpt.get());
         }
-        
+    
         throw new DocumentNotFoundException(String.format(DOCUMENT_NOT_FOUND, fileId));
     }
     
     
     public void deleteDocument(String fileId){
-        
-        DocumentHashId hashid = new DocumentHashId(salt);
-        long documentId = hashid.decode(fileId);
-        
+    
+        HashIdDocument hashId = new HashIdDocument(salt);
+        long documentId = hashId.decode(fileId);
+    
         Optional<Document> documentOpt = documentRepository.findById(documentId);
-        
+    
         if (documentOpt.isPresent()) {
             Document document = documentOpt.get();
             document.setDeleted(LocalDateTime.now());
@@ -99,9 +99,9 @@ public class DocumentService{
     
     
     public DocumentInfo aboutDocument(String fileId, HttpServletRequest request){
-        DocumentHashId hashid = new DocumentHashId(salt);
-        
-        Optional<Document> documentOpt = documentRepository.findById(hashid.decode(fileId));
+        HashIdDocument hashId = new HashIdDocument(salt);
+    
+        Optional<Document> documentOpt = documentRepository.findById(hashId.decode(fileId));
         if (documentOpt.isPresent()) {
             Document document = documentOpt.get();
             return new DocumentInfo(document, salt, request.getRequestURL().toString());
