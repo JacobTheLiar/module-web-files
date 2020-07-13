@@ -1,8 +1,10 @@
 package pl.jacob_the_liar.module.web_files.model;
 
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.hashids.Hashids;
+import pl.jacob_the_liar.module.web_files.utils.DocumentHashId;
+import pl.jacob_the_liar.module.web_files.utils.DocumentId;
 
 
 /**
@@ -14,13 +16,14 @@ import org.hashids.Hashids;
  * *
  ******************************************************/
 @Getter
+@EqualsAndHashCode
 public class DocumentInfo extends Document{
     
     private final String hashids;
     private final String directLink;
     
     
-    public DocumentInfo(Document document, String hashidsSalt, String uri){
+    public DocumentInfo(Document document, String salt, String uri){
         super();
         super.setId(document.getId());
         super.setOriginalName(document.getOriginalName());
@@ -33,9 +36,8 @@ public class DocumentInfo extends Document{
         super.setDeleted(document.getDeleted());
         super.setOwnerIp(document.getOwnerIp());
         
-        Hashids ids = new Hashids(hashidsSalt);
-        hashids = ids.encode(document.getId());
-        
+        DocumentId documentId = new DocumentHashId(salt);
+        this.hashids = documentId.encode(document.getId());
         this.directLink = uri + hashids;
     }
 }

@@ -1,6 +1,7 @@
 package pl.jacob_the_liar.module.web_files.controller;
 
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +34,7 @@ public class GetDocumentController{
     
     
     @GetMapping
-    public ResponseEntity<ByteArrayResource> getFile(@PathVariable String fileId){
+    public ResponseEntity<ByteArrayResource> getFile(@NonNull @PathVariable String fileId){
         DocumentDownload download = documentService.getDocument(fileId);
         
         try {

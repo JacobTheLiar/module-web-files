@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BooleanSupplier;
 
 
 /**
@@ -18,20 +19,20 @@ import java.nio.file.Paths;
  * *
  ******************************************************/
 @RequiredArgsConstructor
-public class StoreDocument{
+public class StoreDocument implements BooleanSupplier{
     
     private final DocumentStore document;
     private final DocumentBytes documentBytes;
     
     
-    public boolean proceed(){
+    public boolean getAsBoolean(){
         Path fileNameAndPath = Paths.get(document.getLocalPath(), document.getLocalName());
         try {
             Files.write(fileNameAndPath, documentBytes.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return Boolean.FALSE;
         }
-        return true;
+        return Boolean.TRUE;
     }
 }

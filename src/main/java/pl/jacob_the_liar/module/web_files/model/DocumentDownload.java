@@ -32,17 +32,8 @@ public class DocumentDownload{
     }
     
     
-    public Document getDocument(){
-        return document;
-    }
-    
-    
     public byte[] getData() throws IOException{
-        
         File file = new File(document.getLocalPath() + document.getLocalName());
-        
-        byte[] data = Files.readAllBytes(file.toPath());
-        
-        return data;
+        return Files.readAllBytes(file.toPath());
     }
 }

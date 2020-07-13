@@ -2,22 +2,21 @@ package pl.jacob_the_liar.module.web_files.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.jacob_the_liar.module.web_files.exception.DocumentNotFoundException;
 import pl.jacob_the_liar.module.web_files.model.Document;
 import pl.jacob_the_liar.module.web_files.model.DocumentDownload;
 import pl.jacob_the_liar.module.web_files.model.DocumentInfo;
 import pl.jacob_the_liar.module.web_files.repository.DocumentRepository;
-import pl.jacob_the_liar.module.web_files.utils.DocumentChecksum;
-import pl.jacob_the_liar.module.web_files.utils.FileNameMaker;
-import pl.jacob_the_liar.module.web_files.utils.MultipartFileBytes;
-import pl.jacob_the_liar.module.web_files.utils.StoreDocument;
+import pl.jacob_the_liar.module.web_files.utils.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 
 /**
@@ -33,11 +32,10 @@ import java.util.Optional;
 public class DocumentService{
     
     private final DocumentRepository documentRepository;
-    
-    @Value("${storage.path}")
-    private String localPath;
+    private static final String DOCUMENT_NOT_FOUND = "Document not found! [id#%s]";
+    private final Environment environment;
     @Value("${hashids.salt}")
-    private String hashidsSalt;
+    private final String salt;
     
     
     public DocumentInfo storeDocument(MultipartFile file, HttpServletRequest request){
@@ -46,7 +44,7 @@ public class DocumentService{
         
         document.setOriginalName(file.getOriginalFilename());
         document.setContentType(file.getContentType());
-        document.setLocalPath(localPath);
+        document.setLocalPath(environment.getProperty("storage.path"));
         
         FileNameMaker nameMaker = new FileNameMaker(file.getOriginalFilename());
         document.setLocalName(nameMaker.getNewFileName());
@@ -54,32 +52,61 @@ public class DocumentService{
         document.setOwnerIp(request.getRemoteHost());
         document.setStoreTime(LocalDateTime.now());
         
-        StoreDocument storeDocument = new StoreDocument(document, new MultipartFileBytes(file));
-        storeDocument.proceed();
-    
+        BooleanSupplier storeDocument = new StoreDocument(document, new MultipartFileBytes(file));
+        storeDocument.getAsBoolean();
+        
         DocumentChecksum checksum = new DocumentChecksum(document);
         checksum.proceedChecksum();
-    
+        
         documentRepository.save(document);
-    
-        DocumentInfo info = new DocumentInfo(document, hashidsSalt, request.getRequestURL().toString());
-    
-        return info;
+        
+        return new DocumentInfo(document, salt, request.getRequestURL().toString());
     }
     
     
-    public DocumentDownload getDocument(String fileId){
+    public DocumentDownload getDocument(String fileId) throws DocumentNotFoundException{
         
-        Hashids hashids = new Hashids(hashidsSalt);
+        DocumentHashId hashid = new DocumentHashId(salt);
+        long documentId = hashid.decode(fileId);
         
-        long[] docId = hashids.decode(fileId);
-        
-        Optional<Document> doc = documentRepository.findById(docId[0]);
-        if (doc.isPresent()) {
-            doc.get().setLastUse(LocalDateTime.now());
-            documentRepository.save(doc.get());
-            return new DocumentDownload(doc.get());
+        Optional<Document> documentOpt = documentRepository.findById(documentId);
+        if (documentOpt.isPresent()) {
+            documentOpt.get().setLastUse(LocalDateTime.now());
+            documentRepository.save(documentOpt.get());
+            return new DocumentDownload(documentOpt.get());
         }
-        return null;
+        
+        throw new DocumentNotFoundException(String.format(DOCUMENT_NOT_FOUND, fileId));
+    }
+    
+    
+    public void deleteDocument(String fileId) throws DocumentNotFoundException{
+        
+        DocumentHashId hashid = new DocumentHashId(salt);
+        long documentId = hashid.decode(fileId);
+        
+        Optional<Document> documentOpt = documentRepository.findById(documentId);
+        
+        if (documentOpt.isPresent()) {
+            Document document = documentOpt.get();
+            document.setDeleted(LocalDateTime.now());
+            documentRepository.save(document);
+            return;
+        }
+        
+        throw new DocumentNotFoundException(String.format(DOCUMENT_NOT_FOUND, fileId));
+    }
+    
+    
+    public DocumentInfo aboutDocument(String fileId, HttpServletRequest request) throws DocumentNotFoundException{
+        DocumentHashId hashid = new DocumentHashId(salt);
+        
+        Optional<Document> documentOpt = documentRepository.findById(hashid.decode(fileId));
+        if (documentOpt.isPresent()) {
+            Document document = documentOpt.get();
+            return new DocumentInfo(document, salt, request.getRequestURL().toString());
+        }
+        
+        throw new DocumentNotFoundException(String.format(DOCUMENT_NOT_FOUND, fileId));
     }
 }
