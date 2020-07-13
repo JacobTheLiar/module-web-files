@@ -64,11 +64,11 @@ public class DocumentService{
     }
     
     
-    public DocumentDownload getDocument(String fileId) throws DocumentNotFoundException{
-        
+    public DocumentDownload getDocument(String fileId){
+    
         DocumentHashId hashid = new DocumentHashId(salt);
         long documentId = hashid.decode(fileId);
-        
+    
         Optional<Document> documentOpt = documentRepository.findById(documentId);
         if (documentOpt.isPresent()) {
             documentOpt.get().setLastUse(LocalDateTime.now());
@@ -80,7 +80,7 @@ public class DocumentService{
     }
     
     
-    public void deleteDocument(String fileId) throws DocumentNotFoundException{
+    public void deleteDocument(String fileId){
         
         DocumentHashId hashid = new DocumentHashId(salt);
         long documentId = hashid.decode(fileId);
@@ -98,7 +98,7 @@ public class DocumentService{
     }
     
     
-    public DocumentInfo aboutDocument(String fileId, HttpServletRequest request) throws DocumentNotFoundException{
+    public DocumentInfo aboutDocument(String fileId, HttpServletRequest request){
         DocumentHashId hashid = new DocumentHashId(salt);
         
         Optional<Document> documentOpt = documentRepository.findById(hashid.decode(fileId));
