@@ -8,7 +8,7 @@ import org.hashids.Hashids;
  * @author: Jakub O.  [https://github.com/JacobTheLiar]
  * @date : 2020-07-09 19:00
  * *
- * @className: HashId
+ * @className: HashIdDocument
  * *
  * *
  ******************************************************/

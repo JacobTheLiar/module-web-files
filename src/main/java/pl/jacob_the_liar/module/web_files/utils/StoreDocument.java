@@ -1,13 +1,12 @@
 package pl.jacob_the_liar.module.web_files.utils;
 
 
-import lombok.RequiredArgsConstructor;
+import pl.jacob_the_liar.module.web_files.exception.DocumentFileIoException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.BooleanSupplier;
 
 
 /**
@@ -18,21 +17,14 @@ import java.util.function.BooleanSupplier;
  * *
  * *
  ******************************************************/
-@RequiredArgsConstructor
-public class StoreDocument implements BooleanSupplier{
+public class StoreDocument implements StoreConsumer{
     
-    private final DocumentStore document;
-    private final DocumentBytes documentBytes;
-    
-    
-    public boolean getAsBoolean(){
+    public void accept(DocumentStore document, DocumentBytes documentBytes){
         Path fileNameAndPath = Paths.get(document.getLocalPath(), document.getLocalName());
         try {
             Files.write(fileNameAndPath, documentBytes.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-            return Boolean.FALSE;
+            throw new DocumentFileIoException(e);
         }
-        return Boolean.TRUE;
     }
 }

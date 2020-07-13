@@ -16,7 +16,6 @@ import pl.jacob_the_liar.module.web_files.utils.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 
 
 /**
@@ -31,8 +30,8 @@ import java.util.function.BooleanSupplier;
 @RequiredArgsConstructor
 public class DocumentService{
     
-    private final DocumentRepository documentRepository;
     private static final String DOCUMENT_NOT_FOUND = "Document not found! [id#%s]";
+    private final DocumentRepository documentRepository;
     private final Environment environment;
     @Value("${hashids.salt}")
     private final String salt;
@@ -41,25 +40,25 @@ public class DocumentService{
     public DocumentInfo storeDocument(MultipartFile file, HttpServletRequest request){
         
         Document document = new Document();
-        
+    
         document.setOriginalName(file.getOriginalFilename());
         document.setContentType(file.getContentType());
         document.setLocalPath(environment.getProperty("storage.path"));
-        
+    
         FileNameMaker nameMaker = new FileNameMaker(file.getOriginalFilename());
         document.setLocalName(nameMaker.getNewFileName());
-        
+    
         document.setOwnerIp(request.getRemoteHost());
         document.setStoreTime(LocalDateTime.now());
-        
-        BooleanSupplier storeDocument = new StoreDocument(document, new MultipartFileBytes(file));
-        storeDocument.getAsBoolean();
-        
-        DocumentChecksum checksum = new DocumentChecksum(document);
-        checksum.proceedChecksum();
-        
+    
+        StoreConsumer storeDocument = new StoreDocument();
+        storeDocument.accept(document, new MultipartFileBytes(file));
+    
+        ChecksumConsumer checksum = new DocumentChecksum();
+        checksum.accept(document);
+    
         documentRepository.save(document);
-        
+    
         return new DocumentInfo(document, salt, request.getRequestURL().toString());
     }
     
