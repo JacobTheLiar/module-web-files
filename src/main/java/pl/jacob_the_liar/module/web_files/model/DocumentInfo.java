@@ -16,7 +16,7 @@ import pl.jacob_the_liar.module.web_files.utils.HashIdDocument;
  * *
  ******************************************************/
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class DocumentInfo extends Document{
     
     private final String hashids;
