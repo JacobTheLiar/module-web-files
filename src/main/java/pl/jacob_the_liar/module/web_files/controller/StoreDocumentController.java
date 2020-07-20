@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.jacob_the_liar.module.web_files.model.DocumentInfo;
-import pl.jacob_the_liar.module.web_files.service.DocumentService;
+import pl.jacob_the_liar.module.web_files.service.StoreDocumentService;
+import pl.jacob_the_liar.module.web_files.utils.DocumentRequest;
+import pl.jacob_the_liar.module.web_files.utils.DocumentRequestImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,11 +30,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class StoreDocumentController{
     
-    private final DocumentService documentService;
+    private final StoreDocumentService documentService;
     
     
     @PostMapping
     public DocumentInfo storeDocument(@NonNull @RequestParam("file") MultipartFile file, HttpServletRequest request){
-        return documentService.storeDocument(file, request);
+        DocumentRequest documentRequest = new DocumentRequestImpl(request);
+        return documentService.storeDocument(file, documentRequest);
     }
 }

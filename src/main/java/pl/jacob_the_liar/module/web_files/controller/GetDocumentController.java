@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.jacob_the_liar.module.web_files.model.DocumentDownload;
-import pl.jacob_the_liar.module.web_files.service.DocumentService;
+import pl.jacob_the_liar.module.web_files.service.ReadDocumentService;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ import java.io.IOException;
 @RequestMapping("${uri.get}")
 public class GetDocumentController{
     
-    private final DocumentService documentService;
+    private final ReadDocumentService documentService;
     
     
     @GetMapping

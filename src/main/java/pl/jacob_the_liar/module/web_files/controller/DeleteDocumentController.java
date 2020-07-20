@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.jacob_the_liar.module.web_files.service.DocumentService;
+import pl.jacob_the_liar.module.web_files.service.DeleteDocumentService;
 
 
 /**
@@ -23,7 +23,7 @@ import pl.jacob_the_liar.module.web_files.service.DocumentService;
 @RequiredArgsConstructor
 public class DeleteDocumentController{
     
-    private final DocumentService documentService;
+    private final DeleteDocumentService documentService;
     
     
     @DeleteMapping

@@ -11,7 +11,7 @@ package pl.jacob_the_liar.module.web_files.exception;
  ******************************************************/
 public class DocumentNotFoundException extends RuntimeException{
     
-    public DocumentNotFoundException(String message){
-        super(message);
+    public DocumentNotFoundException(String fileId){
+        super(String.format("Document not found! [id#%s]", fileId));
     }
 }

@@ -1,5 +1,8 @@
-package pl.jacob_the_liar.module.web_files.utils;
+package pl.jacob_the_liar.module.web_files.utils.consumer;
 
+
+import pl.jacob_the_liar.module.web_files.utils.DocumentBytes;
+import pl.jacob_the_liar.module.web_files.utils.DocumentStore;
 
 import java.util.function.BiConsumer;
 

@@ -2,6 +2,7 @@ package pl.jacob_the_liar.module.web_files.utils;
 
 
 import pl.jacob_the_liar.module.web_files.exception.DocumentFileIoException;
+import pl.jacob_the_liar.module.web_files.utils.consumer.StoreConsumer;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -5,11 +5,11 @@ package pl.jacob_the_liar.module.web_files.utils;
  * @author: Jakub O.  [https://github.com/JacobTheLiar]
  * @date : 2020-06-29 18:20
  * *
- * @className: ChecksumInfo
+ * @className: DocumentChecksumInfo
  * *
  * *
  ******************************************************/
-public interface ChecksumInfo{
+public interface DocumentChecksumInfo{
     
     String getLocalName();
     

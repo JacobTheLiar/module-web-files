@@ -1,8 +1,9 @@
 package pl.jacob_the_liar.module.web_files.utils;
 
 
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import pl.jacob_the_liar.module.web_files.model.Document;
+import pl.jacob_the_liar.module.web_files.utils.consumer.FileNameConsumer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,19 +17,16 @@ import java.time.format.DateTimeFormatter;
  * *
  * *
  ******************************************************/
-@RequiredArgsConstructor
-public class FileNameMaker{
+
+public class LocalFileName implements FileNameConsumer{
     
-    private final String originalFileName;
-    
-    
-    public String getNewFileName(){
+    @Override
+    public void accept(Document document, String originalFileName){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
         StringBuilder newName = new StringBuilder();
         newName.append(LocalDateTime.now().format(formatter))
                 .append(".")
                 .append(FilenameUtils.getExtension(originalFileName));
-        
-        return newName.toString();
+        document.setLocalName(newName.toString());
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.jacob_the_liar.module.web_files.model.DocumentInfo;
-import pl.jacob_the_liar.module.web_files.service.DocumentService;
+import pl.jacob_the_liar.module.web_files.service.AboutDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("${uri.about}")
 public class AboutDocumentController{
     
-    private final DocumentService documentService;
+    private final AboutDocumentService documentService;
     
     
     @GetMapping

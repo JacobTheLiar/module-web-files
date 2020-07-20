@@ -21,6 +21,7 @@ public class DocumentInfo extends Document{
     
     private final String hashids;
     private final String directLink;
+    private final Boolean isPublic;
     
     
     public DocumentInfo(Document document, String salt, String uri){
@@ -39,5 +40,6 @@ public class DocumentInfo extends Document{
         DocumentId documentId = new HashIdDocument(salt);
         this.hashids = documentId.encode(document.getId());
         this.directLink = uri + hashids;
+        this.isPublic = document.getTokenHash() == null;
     }
 }

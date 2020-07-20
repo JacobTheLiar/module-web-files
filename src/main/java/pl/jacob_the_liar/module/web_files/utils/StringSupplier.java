@@ -1,17 +1,17 @@
 package pl.jacob_the_liar.module.web_files.utils;
 
 
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 /**
  * @author: Jakub O.  [https://github.com/JacobTheLiar]
- * @date : 2020-07-13 20:58
+ * @date : 2020-07-20 21:24
  * *
- * @className: ChecksumConsumer
+ * @className: StringSupplier
  * *
  * *
  ******************************************************/
-public interface ChecksumConsumer extends Consumer<ChecksumInfo>{
+public interface StringSupplier extends Supplier<String>{
     
 }
